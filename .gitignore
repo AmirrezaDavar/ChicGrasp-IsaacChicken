@@ -22,3 +22,5 @@ artifacts/
 *.png
 *.jpg
 *.jpeg
+
+*.egg-info/

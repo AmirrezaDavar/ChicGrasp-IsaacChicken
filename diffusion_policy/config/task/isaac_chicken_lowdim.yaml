@@ -1,0 +1,27 @@
+name: isaac_chicken_lowdim
+
+# Observation: robot_joint(6) + robot_joint_vel(6) + robot_eef_pose(6) + left_jaw(1) + right_jaw(1) = 20
+obs_dim: 20
+
+# Action: arm joint targets(6) + left-jaw binary(1) + right-jaw binary(1) = 8
+action_dim: 8
+
+# Not used for this task (no keypoint extraction)
+keypoint_dim: 0
+
+# No online rollout runner — we train offline from collected demos.
+# Set env_runner to null to skip online eval during training.
+env_runner:
+  _target_: diffusion_policy.env_runner.null_lowdim_runner.NullLowdimRunner
+
+dataset:
+  _target_: diffusion_policy.dataset.isaac_chicken_dataset.IsaacChickenDataset
+  # Default assumes ChicGrasp and 3_chicken-isaaclab are cloned side-by-side.
+  zarr_path: ../3_chicken-isaaclab/data/replay_buffer.zarr
+  obs_key: state
+  horizon: ${horizon}
+  pad_before: ${eval:'${n_obs_steps}-1+${n_latency_steps}'}
+  pad_after: ${eval:'${n_action_steps}-1'}
+  seed: 42
+  val_ratio: 0.1
+  max_train_episodes: null
