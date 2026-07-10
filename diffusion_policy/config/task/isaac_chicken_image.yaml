@@ -1,0 +1,30 @@
+name: isaac_chicken_image
+
+shape_meta: &shape_meta
+  obs:
+    camera_rgb:
+      shape: [3, 480, 640]
+      type: rgb
+    state:
+      shape: [20]
+      type: low_dim
+  action:
+    shape: [8]
+
+env_runner:
+  _target_: diffusion_policy.env_runner.null_image_runner.NullImageRunner
+
+dataset:
+  _target_: diffusion_policy.dataset.isaac_chicken_image_dataset.IsaacChickenImageDataset
+  shape_meta: *shape_meta
+  zarr_path: /home/wanglab22/3_chicken-isaaclab/data/replay_buffer.zarr
+  image_key: camera_rgb
+  state_key: state
+  action_key: action
+  horizon: ${horizon}
+  pad_before: ${eval:'${n_obs_steps}-1+${n_latency_steps}'}
+  pad_after: ${eval:'${n_action_steps}-1'}
+  n_obs_steps: ${dataset_obs_steps}
+  seed: ${training.seed}
+  val_ratio: 0.1
+  max_train_episodes: null
