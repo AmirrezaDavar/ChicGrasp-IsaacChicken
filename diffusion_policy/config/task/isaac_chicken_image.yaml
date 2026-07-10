@@ -17,7 +17,7 @@ env_runner:
 dataset:
   _target_: diffusion_policy.dataset.isaac_chicken_image_dataset.IsaacChickenImageDataset
   shape_meta: *shape_meta
-  zarr_path: /home/wanglab22/3_chicken-isaaclab/data/replay_buffer.zarr
+  zarr_path: /home/wanglab22/3_chicken-isaaclab/data/chicken_rgb_state/replay_buffer.zarr
   image_key: camera_rgb
   state_key: state
   action_key: action
